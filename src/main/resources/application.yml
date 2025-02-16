@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: PingPong
+  datasource:
+    url: jdbc:h2:mem:pingpongdb;DATABASE_TO_UPPER=false;NON_KEYWORDS=USER
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+      naming.physical-strategy: assignment.game.PingPong.global.config.CustomPhysicalNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+# hard-delete 사용
+# http://localhost:8080/h2-console 해당 url로 접속
