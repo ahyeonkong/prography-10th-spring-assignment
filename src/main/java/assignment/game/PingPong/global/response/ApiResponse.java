@@ -1,5 +1,6 @@
 package assignment.game.PingPong.global.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonPropertyOrder({ "code", "message", "result" }) // 필드 순서 지정
+@JsonInclude(JsonInclude.Include.NON_NULL) // null 값을 제외
 public class ApiResponse<T> {
     private int code;
     private String message;
