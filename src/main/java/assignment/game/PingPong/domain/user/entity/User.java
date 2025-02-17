@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
-    private Integer fakerId;
+    private int fakerId;
 
     private String name;
 
