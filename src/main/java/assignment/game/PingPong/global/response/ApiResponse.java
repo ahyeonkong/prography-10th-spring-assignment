@@ -1,12 +1,14 @@
 package assignment.game.PingPong.global.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonPropertyOrder({ "code", "message", "result" }) // 필드 순서 지정
 public class ApiResponse<T> {
-    private Integer code;
+    private int code;
     private String message;
     private T result;
 
