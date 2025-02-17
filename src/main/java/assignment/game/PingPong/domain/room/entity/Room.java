@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     private String title;
 
     @OneToOne
-    @JoinColumn(name = "host") // "host" 컬럼이 User 엔티티의 ID를 참조
+    @JoinColumn(name = "host") // "host" 컬럼이 User 엔티티의 ID를 참조, host는 방을 생성한 사람
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -28,7 +28,7 @@ public class Room {
     private RoomType roomType;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private RoomStatus status;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
