@@ -21,7 +21,7 @@ public class Room {
 
     @OneToOne
     @JoinColumn(name = "host") // "host" 컬럼이 User 엔티티의 ID를 참조, host는 방을 생성한 사람
-    private User user;
+    private User host;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "room_type")
