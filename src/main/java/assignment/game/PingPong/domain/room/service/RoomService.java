@@ -1,5 +1,6 @@
 package assignment.game.PingPong.domain.room.service;
 
+import assignment.game.PingPong.domain.room.dto.RoomDetailResponse;
 import assignment.game.PingPong.domain.room.dto.RoomResponse;
 import assignment.game.PingPong.domain.room.entity.Room;
 import assignment.game.PingPong.domain.room.entity.RoomType;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,5 +79,28 @@ public class RoomService {
 
         return new RoomResponse((int) roomPage.getTotalElements(), roomPage.getTotalPages(), roomList);
     }
-}
 
+    public ApiResponse<RoomDetailResponse> getRoomDetail(int roomId) {
+        // 방 조회
+        Room room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            return ApiResponse.invalidRequest(); // 존재하지 않는 방 ID에 대한 응답
+        }
+
+        // 날짜 포맷 설정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Room 엔티티를 RoomDetailResponse로 변환
+        RoomDetailResponse response = new RoomDetailResponse(
+                room.getId(),
+                room.getTitle(),
+                room.getHost().getId(),
+                room.getRoomType().toString(),
+                room.getStatus().name(),
+                room.getCreatedAt().format(formatter),
+                room.getUpdatedAt().format(formatter)
+        );
+
+        return ApiResponse.success(response); // 성공 응답 반환
+    }
+}
