@@ -1,5 +1,6 @@
 package assignment.game.PingPong.domain.room.service;
 
+import assignment.game.PingPong.domain.room.dto.RoomResponse;
 import assignment.game.PingPong.domain.room.entity.Room;
 import assignment.game.PingPong.domain.room.entity.RoomType;
 import assignment.game.PingPong.domain.room.repository.RoomRepository;
@@ -8,9 +9,14 @@ import assignment.game.PingPong.domain.user.entity.Status;
 import assignment.game.PingPong.domain.user.entity.User;
 import assignment.game.PingPong.domain.user.repository.UserRepository;
 import assignment.game.PingPong.global.response.ApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
@@ -53,4 +59,23 @@ public class RoomService {
 
         return ApiResponse.success(null); // 성공 응답 반환
     }
+
+    public RoomResponse getAllRooms(int page, int size) {
+        // 페이징 및 정렬 설정 (id 기준 오름차순)
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<Room> roomPage = roomRepository.findAll(pageRequest);
+
+        List<RoomResponse.RoomDetail> roomList = roomPage.getContent().stream().map(room ->
+                new RoomResponse.RoomDetail(
+                        room.getId(),
+                        room.getTitle(),
+                        room.getHost().getId(),
+                        room.getRoomType().toString(),
+                        room.getStatus().name()
+                )
+        ).collect(Collectors.toList());
+
+        return new RoomResponse((int) roomPage.getTotalElements(), roomPage.getTotalPages(), roomList);
+    }
 }
+
