@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -187,5 +188,45 @@ public class RoomService {
             }
         }
         return null;
+    }
+
+    // 방 나가기
+    @Transactional
+    public ApiResponse<Void> leaveRoom(int roomId, int userId) {
+        // 1. 방 존재 여부 확인
+        Room room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            return ApiResponse.invalidRequest(); // 존재하지 않는 방
+        }
+
+        // 2. 유저 존재 여부 확인
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ApiResponse.invalidRequest(); // 존재하지 않는 유저
+        }
+
+        // 3. 유저가 해당 방에 참가 중인지 확인
+        UserRoom userRoom = userRoomRepository.findByUserAndRoom(user, room);
+        if (userRoom == null) {
+            return ApiResponse.invalidRequest(); // 참가하지 않은 상태
+        }
+
+        // 4. 방 상태 확인 (PROGRESS 또는 FINISH 상태인 경우 나갈 수 없음)
+        if (room.getStatus() == RoomStatus.PROGRESS || room.getStatus() == RoomStatus.FINISH) {
+            return ApiResponse.invalidRequest();
+        }
+
+        // 5. 호스트 여부 확인 및 처리
+        if (room.getHost() != null && room.getHost().getId() == user.getId()) {
+            // 호스트가 방을 나가는 경우
+            userRoomRepository.deleteByRoom(room); // 방에 있는 모든 유저 삭제
+            room.setStatus(RoomStatus.FINISH); // 방 상태를 FINISH로 변경
+            roomRepository.save(room);
+            return ApiResponse.success(null); // 성공 응답 반환
+        }
+
+        // 6. 일반 유저가 나가는 경우 처리
+        userRoomRepository.delete(userRoom);
+        return ApiResponse.success(null); // 성공 응답 반환
     }
 }

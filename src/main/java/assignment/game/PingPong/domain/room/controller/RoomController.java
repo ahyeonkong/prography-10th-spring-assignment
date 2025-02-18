@@ -5,6 +5,7 @@ import assignment.game.PingPong.domain.userRoom.dto.JoinRoomRequest;
 import assignment.game.PingPong.domain.room.dto.RoomDetailResponse;
 import assignment.game.PingPong.domain.room.dto.RoomResponse;
 import assignment.game.PingPong.domain.room.service.RoomService;
+import assignment.game.PingPong.domain.userRoom.dto.LeaveRoomRequest;
 import assignment.game.PingPong.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,10 @@ public class RoomController {
         return roomService.joinRoom(roomId, request.getUserId());
     }
 
-}
+    // 방 나가기
+    @PostMapping("/out/{roomId}")
+    public ApiResponse<Void> leaveRoom(@PathVariable int roomId, @RequestBody LeaveRoomRequest request) {
+        return roomService.leaveRoom(roomId, request.getUserId());
+    }
 
+}
