@@ -19,8 +19,8 @@ public class Room {
 
     private String title;
 
-    @OneToOne
-    @JoinColumn(name = "host") // "host" 컬럼이 User 엔티티의 ID를 참조, host는 방을 생성한 사람
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "host") // Room 테이블의 'host' 컬럼이 User 테이블의 ID를 참조, host는 방을 생성한 사람
     private User host;
 
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package assignment.game.PingPong.domain.user.entity;
 
+import assignment.game.PingPong.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,4 +31,6 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "host", fetch = FetchType.LAZY) // Room 엔티티가 관계의 소유자임을 명시
+    private Room room;
 }
