@@ -1,6 +1,7 @@
 package assignment.game.PingPong.domain.room.controller;
 
 import assignment.game.PingPong.domain.room.dto.CreateRoomRequest;
+import assignment.game.PingPong.domain.room.dto.StartGameRequest;
 import assignment.game.PingPong.domain.userRoom.dto.JoinRoomRequest;
 import assignment.game.PingPong.domain.room.dto.RoomDetailResponse;
 import assignment.game.PingPong.domain.room.dto.RoomResponse;
@@ -49,6 +50,12 @@ public class RoomController {
     @PostMapping("/out/{roomId}")
     public ApiResponse<Void> leaveRoom(@PathVariable int roomId, @RequestBody LeaveRoomRequest request) {
         return roomService.leaveRoom(roomId, request.getUserId());
+    }
+
+    // 게임 시작
+    @PutMapping("/start/{roomId}")
+    public ApiResponse<Void> startGame(@PathVariable int roomId, @RequestBody StartGameRequest request) {
+        return roomService.startGame(roomId, request.getUserId());
     }
 
 }

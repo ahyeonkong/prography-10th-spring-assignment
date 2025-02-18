@@ -16,6 +16,7 @@ import assignment.game.PingPong.global.response.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,18 @@ public class RoomService {
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
         this.userRoomRepository = userRoomRepository;
+    }
+
+    @Async
+    @Transactional
+    public void scheduleFinishGame(Room room) {
+        try {
+            Thread.sleep(60000); // 1분 대기
+            room.setStatus(RoomStatus.FINISH); // 방 상태를 FINISH로 변경
+            roomRepository.save(room); // 변경된 상태 저장
+        } catch (InterruptedException e) { // 비동기 작업 내에서 발생한 예외를 RuntimeException으로 던지고, 호출한 메서드에서 이를 처리
+            throw new RuntimeException("에러가 발생했습니다.", e);
+        }
     }
 
     public ApiResponse<Void> createRoom(int userId, String roomType, String title) {
@@ -229,4 +242,44 @@ public class RoomService {
         userRoomRepository.delete(userRoom);
         return ApiResponse.success(null); // 성공 응답 반환
     }
+
+    // 게임 시작
+    @Transactional
+    public ApiResponse<Void> startGame(int roomId, int userId) {
+        // 1. 방 존재 여부 확인
+        Room room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            return ApiResponse.invalidRequest(); // 존재하지 않는 방
+        }
+
+        // 2. 요청한 유저가 호스트인지 확인
+        if (room.getHost() == null || room.getHost().getId() != userId) {
+            return ApiResponse.invalidRequest(); // 호스트가 아님
+        }
+
+        // 3. 방 정원이 꽉 찼는지 확인 (현재 인원 수와 RoomType의 정원 비교)
+        long currentUsers = userRoomRepository.countByRoom(room);
+        if (currentUsers < room.getRoomType().getCapacity()) {
+            return ApiResponse.invalidRequest(); // 정원이 다 차지 않음
+        }
+
+        // 4. 현재 방 상태가 WAIT인지 확인
+        if (room.getStatus() != RoomStatus.WAIT) {
+            return ApiResponse.invalidRequest(); // WAIT 상태가 아님
+        }
+
+        // 5. 방 상태를 PROGRESS로 변경
+        room.setStatus(RoomStatus.PROGRESS);
+        roomRepository.save(room);
+
+        // 6. 1분 뒤 방 상태를 FINISH로 변경 (비동기 작업)
+        try {
+            scheduleFinishGame(room);
+        } catch (RuntimeException e) {
+            return ApiResponse.serverError(); // 서버 에러 응답 반환
+        }
+
+        return ApiResponse.success(null); // 성공 응답 반환
+    }
+
 }
