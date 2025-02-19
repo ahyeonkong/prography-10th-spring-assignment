@@ -20,4 +20,6 @@ public interface UserRoomRepository extends JpaRepository<UserRoom, Integer> {
 
     void deleteByRoom(Room room); // 특정 Room에 해당하는 모든 UserRoom 삭제
 
+    UserRoom findByUserIdAndRoomId(int userId, int roomId);
+
 }
