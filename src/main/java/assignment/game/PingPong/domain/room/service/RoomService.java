@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -39,7 +40,6 @@ public class RoomService {
     }
 
     @Async
-    @Transactional
     public void scheduleFinishGame(Room room) {
         try {
             Thread.sleep(60000); // 1분 대기
@@ -88,11 +88,12 @@ public class RoomService {
         return ApiResponse.success(null); // 성공 응답 반환
     }
 
-    public RoomResponse getAllRooms(int page, int size) {
+    public ApiResponse<RoomResponse> getAllRooms(int page, int size) {
         // 페이징 및 정렬 설정 (id 기준 오름차순)
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").ascending());
         Page<Room> roomPage = roomRepository.findAll(pageRequest);
 
+        // Room 데이터를 RoomDetail로 변환
         List<RoomResponse.RoomDetail> roomList = roomPage.getContent().stream().map(room ->
                 new RoomResponse.RoomDetail(
                         room.getId(),
@@ -103,7 +104,15 @@ public class RoomService {
                 )
         ).collect(Collectors.toList());
 
-        return new RoomResponse((int) roomPage.getTotalElements(), roomPage.getTotalPages(), roomList);
+        // RoomResponse 생성
+        RoomResponse response = new RoomResponse(
+                (int) roomPage.getTotalElements(),
+                roomPage.getTotalPages(),
+                roomList
+        );
+
+        // ApiResponse로 성공 응답 반환
+        return ApiResponse.success(response);
     }
 
     public ApiResponse<RoomDetailResponse> getRoomDetail(int roomId) {
@@ -230,11 +239,10 @@ public class RoomService {
         }
 
         // 5. 호스트 여부 확인 및 처리
-        if (room.getHost() != null && room.getHost().getId() == user.getId()) {
+        if (room.getHost() != null && room.getHost().getId()==(user.getId())) {
             // 호스트가 방을 나가는 경우
             userRoomRepository.deleteByRoom(room); // 방에 있는 모든 유저 삭제
             room.setStatus(RoomStatus.FINISH); // 방 상태를 FINISH로 변경
-            roomRepository.save(room);
             return ApiResponse.success(null); // 성공 응답 반환
         }
 
