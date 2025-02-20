@@ -1,6 +1,8 @@
 package assignment.game.PingPong.domain.user.entity;
 
 import assignment.game.PingPong.domain.room.entity.Room;
+import assignment.game.PingPong.global.config.AuditEntityListener;
+import assignment.game.PingPong.global.config.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "\"User\"")
 @Getter
 @Setter
-public class User {
+@EntityListeners(AuditEntityListener.class)
+public class User implements Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,7 +28,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
