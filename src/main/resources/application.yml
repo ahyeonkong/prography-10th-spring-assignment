@@ -5,11 +5,13 @@ spring:
   application:
     name: PingPong
   datasource:
-    url: jdbc:h2:mem:pingpongdb;DATABASE_TO_UPPER=false;NON_KEYWORDS=USER
     driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:prography
     username: sa
     password:
   jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
       naming.physical-strategy: assignment.game.PingPong.global.config.CustomPhysicalNamingStrategy
@@ -27,5 +29,4 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
 
-# hard-delete 사용
 # http://localhost:8080/h2-console 해당 url로 접속
