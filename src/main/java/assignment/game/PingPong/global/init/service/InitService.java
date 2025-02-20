@@ -71,10 +71,7 @@ public class InitService {
                 entityManager.createNativeQuery("DELETE FROM " + table).executeUpdate()
         );
 
-        // 2. AUTO_INCREMENT 값 초기화
-        tables.forEach(table ->
-                entityManager.createNativeQuery("ALTER TABLE " + table + " ALTER COLUMN id RESTART WITH 1").executeUpdate()
-        );
+        // AUTO_INCREMENT 초기화는 하지 않음 (id는 계속 증가)
     }
 
     private User mapToUserEntity(FakerUser fakerUser) {
