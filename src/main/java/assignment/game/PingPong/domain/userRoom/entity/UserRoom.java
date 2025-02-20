@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "UserRoom")
 @Getter
@@ -15,11 +17,11 @@ public class UserRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(name = "room_id") // "room_id" 컬럼이 Room 엔티티의 ID를 참조
     private Room room;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(name = "user_id") // "user_id" 컬럼이 User 엔티티의 ID를 참조
     private User user;
 
