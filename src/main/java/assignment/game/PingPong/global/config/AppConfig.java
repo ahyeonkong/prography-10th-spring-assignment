@@ -1,4 +1,4 @@
-package assignment.game.PingPong.global;
+package assignment.game.PingPong.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
