@@ -9,7 +9,7 @@ import lombok.Setter;
 import static jakarta.persistence.CascadeType.*;
 
 @Entity
-@Table(name = "UserRoom")
+@Table(name = "\"UserRoom\"")
 @Getter
 @Setter
 public class UserRoom {

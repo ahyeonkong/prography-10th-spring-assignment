@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Room")
+@Table(name = "\"Room\"")
 @Getter
 @Setter
 @EntityListeners(AuditEntityListener.class)

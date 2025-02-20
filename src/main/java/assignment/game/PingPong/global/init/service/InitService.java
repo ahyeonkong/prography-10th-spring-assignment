@@ -64,7 +64,7 @@ public class InitService {
     @Transactional
     public void resetDatabase() {
         // 테이블 이름 리스트 (순서 중요: 자식 테이블 → 부모 테이블)
-        List<String> tables = List.of("UserRoom", "Room", "User");
+        List<String> tables = List.of("\"UserRoom\"", "\"Room\"", "\"User\"");
 
         // 1. 모든 데이터 삭제
         tables.forEach(table ->
