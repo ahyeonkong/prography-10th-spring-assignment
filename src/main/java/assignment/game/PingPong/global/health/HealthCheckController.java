@@ -16,6 +16,7 @@ public class HealthCheckController {
     // 헬스체크 API 호출 여부를 추적하는 상태 변수
     private final AtomicBoolean isHealthCheckCalled = new AtomicBoolean(false);
 
+    // 헬스체크 API
     @GetMapping
     public ApiResponse<Void> healthCheck() {
         // 최초 호출 여부 확인
