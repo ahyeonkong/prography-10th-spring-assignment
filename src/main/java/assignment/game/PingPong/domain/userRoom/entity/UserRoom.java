@@ -15,7 +15,7 @@ import static jakarta.persistence.CascadeType.*;
 public class UserRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(name = "room_id") // "room_id" 컬럼이 Room 엔티티의 ID를 참조
