@@ -16,6 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
+    // 유저 전체 조회 API
     @GetMapping("/user")
     public ApiResponse<UserResponse> getAllUsers(
             @RequestParam(defaultValue = "0") int page,

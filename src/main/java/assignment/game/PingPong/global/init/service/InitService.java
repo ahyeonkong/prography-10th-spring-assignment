@@ -29,6 +29,7 @@ public class InitService {
         this.restTemplate = restTemplate;
     }
 
+    // 초기화
     @Transactional
     public ApiResponse<Void> initialize(int seed, int quantity) {
         // 1. 데이터베이스 초기화

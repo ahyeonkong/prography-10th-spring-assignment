@@ -22,6 +22,7 @@ public class TeamService {
         this.userRoomRepository = userRoomRepository;
     }
 
+    // 팀 변경
     @Transactional
     public ApiResponse<Void> changeTeam(int roomId, int userId) {
         // 1. 방 존재 여부 확인

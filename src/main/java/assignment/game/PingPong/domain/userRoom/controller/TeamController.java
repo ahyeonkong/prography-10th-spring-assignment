@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class TeamController {
 
     private final TeamService teamService;
+
+    // 팀 변경 API
     @PutMapping("/{roomId}")
     public ApiResponse<Void> changeTeam(@PathVariable int roomId, @RequestBody ChangeTeamRequest request) {
         return teamService.changeTeam(roomId, request.getUserId());

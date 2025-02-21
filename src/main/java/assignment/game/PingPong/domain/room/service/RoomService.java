@@ -39,6 +39,7 @@ public class RoomService {
         this.userRoomRepository = userRoomRepository;
     }
 
+    // Async 비동기 작업
     @Async
     public void scheduleFinishGame(Room room) {
         try {
@@ -50,6 +51,7 @@ public class RoomService {
         }
     }
 
+    // 방 생성
     public ApiResponse<Void> createRoom(int userId, String roomType, String title) {
         // 유저 조회
         User user = userRepository.findById(userId).orElse(null);
@@ -88,6 +90,7 @@ public class RoomService {
         return ApiResponse.success(null); // 성공 응답 반환
     }
 
+    // 방 전체 조회
     public ApiResponse<RoomResponse> getAllRooms(int page, int size) {
         // 페이징 및 정렬 설정 (id 기준 오름차순)
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").ascending());
@@ -115,6 +118,7 @@ public class RoomService {
         return ApiResponse.success(response);
     }
 
+    // 방 상세 조회
     public ApiResponse<RoomDetailResponse> getRoomDetail(int roomId) {
         // 방 조회
         Room room = roomRepository.findById(roomId).orElse(null);
@@ -139,6 +143,7 @@ public class RoomService {
         return ApiResponse.success(response); // 성공 응답 반환
     }
 
+    // 방 참가
     public ApiResponse<Void> joinRoom(int roomId, int userId) {
         // 방 조회
         Room room = roomRepository.findById(roomId).orElse(null);
@@ -193,6 +198,7 @@ public class RoomService {
         return ApiResponse.success(null); // 성공 응답 반환
     }
 
+    // 팀 배정
     private Team assignTeam(Room room) {
         RoomType roomType = room.getRoomType(); // 방의 타입 가져오기
         long redCount = userRoomRepository.countByTeamAndRoom(Team.RED, room);

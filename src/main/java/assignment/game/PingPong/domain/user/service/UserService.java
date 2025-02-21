@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    
+    // 유저 전체 조회
     public ApiResponse<UserResponse> getAllUsers(int page, int size) {
         // 유효성 검사
         if (page < 0 || size < 1) {

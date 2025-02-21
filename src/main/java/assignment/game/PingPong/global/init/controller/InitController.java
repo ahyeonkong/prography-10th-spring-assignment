@@ -18,6 +18,7 @@ public class InitController {
 
     private final InitService initService;
 
+    // 초기화 API
     @PostMapping
     public ApiResponse<Void> initializeData(@RequestBody InitRequest request) {
         return initService.initialize(request.getSeed(), request.getQuantity());

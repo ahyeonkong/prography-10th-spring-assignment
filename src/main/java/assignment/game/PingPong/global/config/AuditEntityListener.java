@@ -4,6 +4,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
+/***
+ * 나노초 제거 기능 구현
+ */
 public class AuditEntityListener {
 
     @PrePersist

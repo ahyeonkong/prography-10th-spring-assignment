@@ -13,7 +13,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleAllExceptions(Exception ex) {
 
-        // ApiResponse.serverError() 반환
         return new ResponseEntity<>(
                 ApiResponse.serverError(), // 서버 에러 응답
                 HttpStatus.INTERNAL_SERVER_ERROR
@@ -23,7 +22,6 @@ public class GlobalExceptionHandler {
     // 특정 예외 처리 (예: IllegalArgumentException)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        // ApiResponse.serverError() 반환
         return new ResponseEntity<>(
                 ApiResponse.serverError(), // 서버 에러 응답
                 HttpStatus.INTERNAL_SERVER_ERROR
