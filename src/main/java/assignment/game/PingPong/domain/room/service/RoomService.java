@@ -69,6 +69,11 @@ public class RoomService {
             return ApiResponse.invalidRequest(); // 이미 호스트로 설정된 방이 있음
         }
 
+        // 유저가 현재 참여중인 방이 있는지 확인
+        if (userRoomRepository.existsByUser(user)) {
+            return ApiResponse.invalidRequest();
+        }
+
         // 새로운 방 생성 및 초기화
         Room room = new Room();
         room.setHost(user);
