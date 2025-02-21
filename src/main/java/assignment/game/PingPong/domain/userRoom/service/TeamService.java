@@ -10,6 +10,8 @@ import assignment.game.PingPong.global.response.ApiResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional
 public class TeamService {
@@ -57,6 +59,9 @@ public class TeamService {
         // 6. 팀 변경 처리
         userRoom.setTeam(newTeam);
         userRoomRepository.save(userRoom);
+
+        room.setUpdatedAt(LocalDateTime.now()); // 직접 시간 설정
+        roomRepository.save(room);
 
         return ApiResponse.success(null); // 성공 응답 반환
     }

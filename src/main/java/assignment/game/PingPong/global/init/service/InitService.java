@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,9 +89,6 @@ public class InitService {
             user.setStatus(Status.NON_ACTIVE); // 비활성 상태
         }
 
-        LocalDateTime now = LocalDateTime.now().withNano(0);
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
 
         return user;
     }

@@ -80,8 +80,6 @@ public class RoomService {
         room.setRoomType(RoomType.valueOf(roomType));
         room.setTitle(title);
         room.setStatus(RoomStatus.WAIT); // 초기 상태: 대기(WAIT)
-        room.setCreatedAt(LocalDateTime.now().withNano(0));
-        room.setUpdatedAt(LocalDateTime.now().withNano(0));
 
         room = roomRepository.save(room);
 
@@ -200,6 +198,9 @@ public class RoomService {
         userRoom.setTeam(assignedTeam);
         userRoomRepository.save(userRoom);
 
+        room.setUpdatedAt(LocalDateTime.now()); // 직접 시간 설정
+        roomRepository.save(room);
+
         return ApiResponse.success(null); // 성공 응답 반환
     }
 
@@ -259,6 +260,10 @@ public class RoomService {
 
         // 6. 일반 유저가 나가는 경우 처리
         userRoomRepository.delete(userRoom);
+
+        room.setUpdatedAt(LocalDateTime.now()); // 직접 시간 설정
+        roomRepository.save(room);
+
         return ApiResponse.success(null); // 성공 응답 반환
     }
 
